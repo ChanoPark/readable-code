@@ -9,6 +9,7 @@ import cleancode.studycafe.tobe.model.StudyCafePass;
 import cleancode.studycafe.tobe.model.StudyCafePassType;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StudyCafePassMachine {
 
@@ -28,7 +29,7 @@ public class StudyCafePassMachine {
                 List<StudyCafePass> studyCafePasses = studyCafeFileHandler.readStudyCafePasses();
                 List<StudyCafePass> hourlyPasses = studyCafePasses.stream()
                     .filter(studyCafePass -> studyCafePass.getPassType() == StudyCafePassType.HOURLY)
-                    .toList();
+                    .collect(Collectors.toList());
                 outputHandler.showPassListForSelection(hourlyPasses);
                 StudyCafePass selectedPass = inputHandler.getSelectPass(hourlyPasses);
                 outputHandler.showPassOrderSummary(selectedPass, null);
@@ -37,7 +38,7 @@ public class StudyCafePassMachine {
                 List<StudyCafePass> studyCafePasses = studyCafeFileHandler.readStudyCafePasses();
                 List<StudyCafePass> weeklyPasses = studyCafePasses.stream()
                     .filter(studyCafePass -> studyCafePass.getPassType() == StudyCafePassType.WEEKLY)
-                    .toList();
+                    .collect(Collectors.toList());
                 outputHandler.showPassListForSelection(weeklyPasses);
                 StudyCafePass selectedPass = inputHandler.getSelectPass(weeklyPasses);
                 outputHandler.showPassOrderSummary(selectedPass, null);
@@ -46,7 +47,7 @@ public class StudyCafePassMachine {
                 List<StudyCafePass> studyCafePasses = studyCafeFileHandler.readStudyCafePasses();
                 List<StudyCafePass> fixedPasses = studyCafePasses.stream()
                     .filter(studyCafePass -> studyCafePass.getPassType() == StudyCafePassType.FIXED)
-                    .toList();
+                    .collect(Collectors.toList());
                 outputHandler.showPassListForSelection(fixedPasses);
                 StudyCafePass selectedPass = inputHandler.getSelectPass(fixedPasses);
 
