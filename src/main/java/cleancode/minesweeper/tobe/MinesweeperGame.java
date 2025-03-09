@@ -38,42 +38,33 @@ public class MinesweeperGame {
             String cellInput = getCellInputFromUser(scanner);
             String userActionInput = getUserActionInputFromUser(scanner);
 
-            int selectedColumnIndex = getSelectedColumnIndex(cellInput);
-            int selectedRowIndex = getSelectedRowIndex(cellInput);
-
-            if (doesUserChooseToPlantFlag(userActionInput)) {
-                BOARD[selectedRowIndex][selectedColumnIndex] = FLAG_SIGN;
-                checkIfGameIsOver();
-            } else if (doesUserChooseToOpenCell(userActionInput)) {
-                if (isLandMineCell(selectedColumnIndex, selectedRowIndex)) {
-                    BOARD[selectedRowIndex][selectedColumnIndex] = MINE_SIGN;
-                    changeGameStatusToLose();
-                    continue;
-                } else {
-                    open(selectedRowIndex, selectedColumnIndex);
-                }
-                checkIfGameIsOver();
-            } else {
-                System.out.println("잘못된 번호를 선택하셨습니다.");
-            }
+            actOnCell(cellInput, userActionInput);
         }
     }
 
-    private static boolean isLandMineCell(int selectedColumnIndex, int selectedRowIndex) {
-        return LAND_MINES[selectedRowIndex][selectedColumnIndex];
-    }
+    private static void actOnCell(String cellInput, String userActionInput) {
+        int selectedColumnIndex = getSelectedColumnIndex(cellInput);
+        int selectedRowIndex = getSelectedRowIndex(cellInput);
 
-    private static boolean doesUserChooseToOpenCell(String userActionInput) {
-        return userActionInput.equals("1");
-    }
+        if (doesUserChooseToPlantFlag(userActionInput)) {
+            BOARD[selectedRowIndex][selectedColumnIndex] = FLAG_SIGN;
+            checkIfGameIsOver();
+            return ;
+        }
 
-    private static boolean doesUserChooseToPlantFlag(String userActionInput) {
-        return userActionInput.equals("2");
-    }
+        if (doesUserChooseToOpenCell(userActionInput)) {
+            if (isLandMineCell(selectedColumnIndex, selectedRowIndex)) {
+                BOARD[selectedRowIndex][selectedColumnIndex] = MINE_SIGN;
+                changeGameStatusToLose();
+                return;
+            }
 
-    private static int getSelectedRowIndex(String cellInput) {
-        char cellInputRow = cellInput.charAt(1);
-        return convertRowFrom(cellInputRow);
+            open(selectedRowIndex, selectedColumnIndex);
+            checkIfGameIsOver();
+            return ;
+        }
+
+        System.out.println("잘못된 번호를 선택하셨습니다.");
     }
 
     private static int getSelectedColumnIndex(String cellInput) {
@@ -81,13 +72,30 @@ public class MinesweeperGame {
         return convertColFrom(cellInputColumn);
     }
 
-    private static String getUserActionInputFromUser(Scanner scanner) {
-        System.out.println("선택한 셀에 대한 행위를 선택하세요. (1: 오픈, 2: 깃발 꽂기)");
-        return scanner.nextLine();
+    private static int getSelectedRowIndex(String cellInput) {
+        char cellInputRow = cellInput.charAt(1);
+        return convertRowFrom(cellInputRow);
+    }
+
+    private static boolean doesUserChooseToPlantFlag(String userActionInput) {
+        return userActionInput.equals("2");
+    }
+
+    private static boolean doesUserChooseToOpenCell(String userActionInput) {
+        return userActionInput.equals("1");
+    }
+
+    private static boolean isLandMineCell(int selectedColumnIndex, int selectedRowIndex) {
+        return LAND_MINES[selectedRowIndex][selectedColumnIndex];
     }
 
     private static String getCellInputFromUser(Scanner scanner) {
         System.out.println("\n선택할 좌표를 입력하세요. (예: a1)");
+        return scanner.nextLine();
+    }
+
+    private static String getUserActionInputFromUser(Scanner scanner) {
+        System.out.println("선택한 셀에 대한 행위를 선택하세요. (1: 오픈, 2: 깃발 꽂기)");
         return scanner.nextLine();
     }
 
