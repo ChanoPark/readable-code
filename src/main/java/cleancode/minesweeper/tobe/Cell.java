@@ -33,7 +33,7 @@ public class Cell {
                 return LAND_MINE_SIGN;
             }
 
-            if (hasLandMineCount()) {
+            if (doesCellHaveLandmineCount()) {
                 return String.valueOf(nearbyLandMineCount);
             }
 
@@ -59,7 +59,7 @@ public class Cell {
         return this.isOpened;
     }
 
-    public boolean hasLandMineCount() {
+    public boolean doesCellHaveLandmineCount() {
         return this.nearbyLandMineCount != 0;
     }
 
