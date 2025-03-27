@@ -1,5 +1,9 @@
 package cleancode.minesweeper.tobe;
 
+import cleancode.minesweeper.tobe.cell.Cell;
+import cleancode.minesweeper.tobe.cell.EmptyCell;
+import cleancode.minesweeper.tobe.cell.LandMineCell;
+import cleancode.minesweeper.tobe.cell.NumberCell;
 import cleancode.minesweeper.tobe.gamelevel.GameLevel;
 
 import java.util.Arrays;
@@ -22,15 +26,16 @@ public class GameBoard {
     public void initializeGame() {
         for (int row = 0; row < rowSize; row++) {
             for (int col = 0; col < colSize; col++) {
-                board[row][col] = Cell.create();
+                board[row][col] = new EmptyCell();
             }
         }
 
         for (int i = 0; i < landMineCount; i++) {
-            int landmineCol = new Random().nextInt(colSize);
             int landmineRow = new Random().nextInt(rowSize);
-            Cell landMineCell = findCell(landmineRow, landmineCol);
-            landMineCell.turnOnLandMine();
+            int landmineCol = new Random().nextInt(colSize);
+
+            LandMineCell landMineCell = new LandMineCell();
+            board[landmineRow][landmineCol] = landMineCell;
         }
 
         for (int row = 0; row < rowSize; row++) {
@@ -40,8 +45,12 @@ public class GameBoard {
                 }
 
                 int count = countNearbyLandMines(row, col);
-                Cell cell = findCell(row, col);
-                cell.updateNearbyLandMineCount(count);
+                if (count == 0) {
+                    continue;
+                }
+
+                board[row][col] = new NumberCell(count);
+
             }
         }
     }
@@ -147,6 +156,6 @@ public class GameBoard {
 
     private boolean doesCellHaveLandMineCount(int rowIndex, int colIndex) {
         Cell cell = findCell(rowIndex, colIndex);
-        return cell.doesCellHaveLandmineCount();
+        return cell.hasLandMineCount();
     }
 }
