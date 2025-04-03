@@ -52,10 +52,6 @@ public class GameBoard {
         return this.colSize;
     }
 
-    public String getSign(CellPosition cellPosition) {
-        return board[cellPosition.getRowIndex()][cellPosition.getColIndex()].getSign();
-    }
-
     public void open(CellPosition cellPosition) {
         Cell cell = findCell(cellPosition);
         cell.open();
@@ -88,12 +84,21 @@ public class GameBoard {
             || cellPosition.isColIndexMoreThanOrEqual(colSize);
     }
 
+    public CellSnapshot getSnapshot(CellPosition cellPosition) {
+        Cell cell = findCell(cellPosition);
+        return cell.getSnapshot();
+    }
+
+    private boolean isOpenedCell(CellPosition cellPosition) {
+        Cell cell = findCell(cellPosition);
+        return cell.isOpened();
+    }
+
     private int countNearbyLandMines(CellPosition cellPosition) {
         long count = calculateSurroundedPositions(cellPosition).stream()
                 .filter(this::isLandMineCell)
                 .count();
         return (int) count;
-
     }
 
     private List<CellPosition> calculateSurroundedPositions(CellPosition cellPosition) {
@@ -107,11 +112,6 @@ public class GameBoard {
 
     private Cell findCell(CellPosition cellPosition) {
         return board[cellPosition.getRowIndex()][cellPosition.getColIndex()];
-    }
-
-    private boolean isOpenedCell(CellPosition cellPosition) {
-        Cell cell = findCell(cellPosition);
-        return cell.isOpened();
     }
 
     private boolean doesCellHaveLandMineCount(CellPosition cellPosition) {
