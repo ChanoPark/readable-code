@@ -44,6 +44,10 @@ public class CellSnapshot {
         return status;
     }
 
+    public boolean isSameStatus(CellSnapshotStatus status) {
+        return this.status == status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
