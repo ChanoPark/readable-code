@@ -13,10 +13,6 @@ public class CellState {
         return new CellState(false, false);
     }
 
-    public boolean isChecked() {
-        return isFlagged || isOpened;
-    }
-
     public boolean isOpened() {
         return this.isOpened;
     }
