@@ -7,24 +7,29 @@ import cleancode.studycafe.tobe.model.StudyCafePass;
 import cleancode.studycafe.tobe.repository.locker.LockerPassFileRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class LockerService {
     private final InputHandler inputHandler = new InputHandler();
     private final OutputHandler outputHandler = new OutputHandler();
     private final LockerPassFileRepository lockerPassFileRepository = new LockerPassFileRepository();
 
-    public StudyCafeLockerPass getStudyCafeLockerPass(StudyCafePass selectedPass) {
-        StudyCafeLockerPass lockerPass = getLockerPassFrom(selectedPass);
+    public Optional<StudyCafeLockerPass> getStudyCafeLockerPass(StudyCafePass selectedPass) {
+        if (selectedPass.isNotLockerType()) {
+            return Optional.empty();
+        }
 
-        if (isLockerPass(lockerPass)) {
-            boolean lockerSelection = getLockerSelection(lockerPass);
+        StudyCafeLockerPass lockerPassCandidate = getLockerPassFrom(selectedPass);
+
+        if (isLockerPass(lockerPassCandidate)) {
+            boolean lockerSelection = getLockerSelection(lockerPassCandidate);
 
             if (lockerSelection) {
-                return lockerPass;
+                return Optional.of(lockerPassCandidate);
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
     private static boolean isLockerPass(StudyCafeLockerPass lockerPass) {
@@ -39,9 +44,9 @@ public class LockerService {
         List<StudyCafeLockerPass> lockerPasses = getStudyCafeLockerPasses();
 
         return lockerPasses.stream()
-                .filter(option ->
-                        studyCafePass.isEqualPassType(option.getPassType())
-                                && studyCafePass.isEqualDuration(option.getDuration())
+                .filter(lockerPass ->
+                        lockerPass.isEqualPassType(studyCafePass.getPassType())
+                     && lockerPass.isEqualDuration(studyCafePass.getDuration())
                 )
                 .findFirst()
                 .orElse(null);

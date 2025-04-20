@@ -11,11 +11,11 @@ public class StudyCafePassService {
 
     private final StudyCafeFileHandler studyCafeFileHandler = new StudyCafeFileHandler();
 
-    public List<StudyCafePass> getPassesFrom(StudyCafePassType studyCafePassType) {
+    public List<StudyCafePass> getPassesBy(StudyCafePassType studyCafePassType) {
         List<StudyCafePass> studyCafePasses = getStudyCafeAllPasses();
 
         return studyCafePasses.stream()
-                .filter(studyCafePass -> studyCafePass.getPassType() == studyCafePassType)
+                .filter(studyCafePass -> studyCafePass.isEqualPassType(studyCafePassType))
                 .collect(Collectors.toList());
     }
 

@@ -10,6 +10,7 @@ import cleancode.studycafe.tobe.service.LockerService;
 import cleancode.studycafe.tobe.service.StudyCafePassService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class StudyCafePassMachine {
 
@@ -25,12 +26,14 @@ public class StudyCafePassMachine {
 
             StudyCafePassType studyCafePassType = getStudyCafePassTypeFromUser();
 
-            List<StudyCafePass> passes = studyCafePassService.getPassesFrom(studyCafePassType);
+            List<StudyCafePass> passes = studyCafePassService.getPassesBy(studyCafePassType);
             StudyCafePass selectedPass = getStudyCafePassFromUser(passes);
 
-            StudyCafeLockerPass lockerPass = lockerService.getStudyCafeLockerPass(selectedPass);
-
-            outputHandler.showPassOrderSummary(selectedPass, lockerPass);
+            Optional<StudyCafeLockerPass> lockerPassOpt = lockerService.getStudyCafeLockerPass(selectedPass);
+            lockerPassOpt.ifPresentOrElse(
+                    lockerPass -> outputHandler.showPassOrderSummary(selectedPass, lockerPass),
+                    () -> outputHandler.showPassOrderSummary(selectedPass)
+            );
         } catch (AppException e) {
             outputHandler.showSimpleMessage(e.getMessage());
         } catch (Exception e) {

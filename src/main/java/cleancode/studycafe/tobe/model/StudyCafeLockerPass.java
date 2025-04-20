@@ -41,4 +41,11 @@ public class StudyCafeLockerPass {
         return "";
     }
 
+    public boolean isEqualPassType(StudyCafePassType passType) {
+        return this.passType.equals(passType);
+    }
+
+    public boolean isEqualDuration(int duration) {
+        return this.duration == duration;
+    }
 }
